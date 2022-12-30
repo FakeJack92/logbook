@@ -1,30 +1,36 @@
 <script lang="ts">
-    import { supabase } from "src/supabaseClient";
+    import { supabase } from "../supabaseClient";
 
     let loading = false;
     let email = "";
 
-    const handleLogin = async () => {
-        try {
-            loading = true;
-            const { error } = await supabase.auth.signInWithOtp({ email });
-            if (error) throw error;
-            alert("Check your email for login link!");
-        } catch (error) {
-            if (error instanceof Error) {
-                alert(error.message);
-            }
-        } finally {
-            loading = false;
-        }
-    };
+    // const handleLogin = async () => {
+    //     try {
+    //         loading = true;
+    //         const { error } = await supabase.auth.signInWithOtp({ email });
+    //         if (error) throw error;
+    //         alert("Check your email for login link!");
+    //     } catch (error) {
+    //         if (error instanceof Error) {
+    //             alert(error.message);
+    //         }
+    //     } finally {
+    //         loading = false;
+    //     }
+    // };
+    
+    async function signInWithGoogle() {
+        const { data, error } = await supabase.auth.signInWithOAuth({
+            provider: "google",
+        });
+    }
 </script>
 
 <div class="row flex-center flex">
     <div class="col-6 form-widget" aria-live="polite">
         <h1 class="header">Supabase + Svelte</h1>
         <p class="description">Sign in via magic link with your email below</p>
-        <form class="form-widget" on:submit|preventDefault={handleLogin}>
+        <form class="form-widget" on:submit|preventDefault={signInWithGoogle}>
             <div>
                 <label for="email">Email</label>
                 <input
